@@ -1,0 +1,35 @@
+<!--https://github.com/cardmeister/cardmeister.github.io-->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Blackjack</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="script.js"></script>
+    <link href="./game.style.css" rel="stylesheet" type="text/css" />
+    <script src="./elements.cardmeister.min.js"></script>
+  </head>
+  <body>
+    <div class="center">
+      <div id="dealer-cards">
+        <card-t suit="Hearts" rank="Jack"></card-t>
+        <card-t suit="Spades" rank="Ace"></card-t>
+      </div>
+    </div>
+    <h2 id="blackjack-payout">Blackjack pays 3 to 2</h2>
+    <h3>Dealer must stand on 17 and must draw to 16</h3>
+    <div class="center">
+      <div id="player-cards">
+        <card-t suit="Clubs" rank="Queen"></card-t>
+        <card-t suit="Diamonds" rank="King"></card-t>
+      </div>
+    </div>
+    <br>
+    <div id="player-buttons">
+      <button id="hit-button">Hit</button>
+      <button id="stand-button">Stand</button>
+    </div>
+  </body>
+</html>

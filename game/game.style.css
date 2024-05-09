@@ -1,0 +1,42 @@
+body {
+    background-color: #00763A;
+    color: #EAFF01;
+    font-family: 'Helvetica', sans-serif;
+    text-align: center;
+}
+
+#dealer-cards {
+    width: 25%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 4fr;
+    grid-gap: 0.5vw;
+    margin: 5px;
+}
+
+#player-cards {
+    width: 25%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 4fr;
+    grid-gap: 0.5vw;
+    margin: 5px;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+#blackjack-payout {
+    color: #DB0003
+}
+
+#player-buttons button {
+    background-color: #EAFF01;
+    box-shadow: 0 0 25px #EAFF01;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

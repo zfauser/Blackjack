@@ -3,5 +3,5 @@ function onInputClick() {
 }
 
 $(document).ready(function() {
-    $('#bet-input').click()
+    $('#bet-input').click();
 });

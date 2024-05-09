@@ -1,3 +1,5 @@
+let play = false;
+
 function onPlaybuttonClick() {
     window.location.href = 'bet';
 }
