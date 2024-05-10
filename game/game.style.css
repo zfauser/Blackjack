@@ -6,7 +6,8 @@ body {
 }
 
 #dealer-cards {
-    width: 25%;
+    width: 200px;
+    height: 100%;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: 4fr;
@@ -15,7 +16,8 @@ body {
 }
 
 #player-cards {
-    width: 25%;
+    width: 200px;
+    height: 100%;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: 4fr;
