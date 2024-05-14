@@ -6,20 +6,20 @@ body {
 }
 
 #dealer-cards {
-    width: 200px;
+    width: 0px;
     height: 100%;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(0, 1fr);
     grid-template-rows: 4fr;
     grid-gap: 0.5vw;
     margin: 5px;
 }
 
 #player-cards {
-    width: 200px;
+    width: 0px;
     height: 100%;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(0, 1fr);
     grid-template-rows: 4fr;
     grid-gap: 0.5vw;
     margin: 5px;
@@ -42,3 +42,27 @@ body {
     border-radius: 5px;
     cursor: pointer;
 }
+
+#player-buttons button:disabled {
+    background-color: grey;
+    box-shadow: 0 0 25px grey;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: not-allowed;
+}
+
+#play-again {
+    background-color: #EAFF01;
+    box-shadow: 0 0 25px #EAFF01;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#lose-modal {
+    background-color: #00763A;
+    color: white;
+    text-align: center;
+  }

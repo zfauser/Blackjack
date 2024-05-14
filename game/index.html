@@ -1,4 +1,4 @@
-<!--https://github.com/cardmeister/cardmeister.github.io-->
+<!-- https://github.com/cardmeister/cardmeister.github.io -->
 
 <!DOCTYPE html>
 <html>
@@ -7,29 +7,44 @@
     <meta name="viewport" content="width=device-width" />
     <title>Blackjack</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="./script.js"></script>
-    <link href="./game.style.css" rel="stylesheet" type="text/css" />
     <script src="./elements.cardmeister.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+    <link href="./game.style.css" rel="stylesheet" type="text/css" />
+    <script src="./script.js"></script>
   </head>
   <body>
     <div class="center">
       <div id="dealer-cards">
-        <card-t suit="Hearts" rank="Jack"></card-t>
-        <card-t suit="Spades" rank="Ace"></card-t>
+        <span></span>
       </div>
     </div>
     <h2 id="blackjack-payout">Blackjack pays 3 to 2</h2>
     <h3>Dealer must stand on 17 and must draw to 16</h3>
     <div class="center">
       <div id="player-cards">
-        <card-t suit="hearts" rank="king"></card-t>
-        <card-t suit="hearts" rank="ace"></card-t>
+        <span></span>
       </div>
     </div>
-    <br>
+    <p id="player-total">Player's Total: </p>
     <div id="player-buttons">
       <button id="hit-button">Hit</button>
       <button id="stand-button">Stand</button>
+    </div>
+    <div id="win-modal" class="modal">
+      <h1>You Win!</h1>
+      <p id="win-reason"></p>
+      <button id="play-again">Play Again</button>
+    </div>
+    <div id="lose-modal" class="modal">
+      <h1>You Lose!</h1>
+      <p id="lose-reason"></p>
+      <button id="play-again">Play Again</button>
+    </div>
+    <div id="push-modal" class="modal">
+      <h1>You Pushed!</h1>
+      <p id="push-reason">You and the dealer got the same total!</p>
+      <button id="play-again">Play Again</button>
     </div>
   </body>
 </html>
