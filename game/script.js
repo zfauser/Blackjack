@@ -3,8 +3,20 @@ let dealersCardsWidth = 200;
 let cards = [];
 let playersCards = [];
 let dealersCards = [];
-let playerTotal = 0;
 let dealFaceDown = false;
+let playerTotal = 0;
+let dealerTotal = 0;
+let balance = 0;
+let bet = 0;
+
+function loadVariables()
+/* 
+  Purpose: To load the variables from local storage
+*/
+{
+    balance = parseInt(localStorage.getItem("balance"));
+    bet = parseInt(localStorage.getItem("bet"));
+}
 
 function createDeck() {
     let suits = ['hearts', 'diamonds', 'clubs', 'spades'];
@@ -80,7 +92,7 @@ function drawCard(playersTurn) {
         dealersCards.push({suit: suit, rank: rank})
         console.log(dealersCards)
         if (dealFaceDown) {
-            $('#dealer-cards').append('<card-t rank="0" backcolor="red" backtext=""></card-t>')
+            $('#dealer-cards').append('<card-t id="hidden-card" rank="0" backcolor="red" backtext=""></card-t>')
             dealersCardsWidth += 100;
             $('#dealer-cards').css('width', dealersCardsWidth + 'px');
             $('#dealer-cards').css('grid-template-columns', 'repeat(' + (dealersCardsWidth/100) + ', 1fr)');
@@ -93,10 +105,37 @@ function drawCard(playersTurn) {
     }
 }
 
+function dealersTurn() {
+    $('#hidden-card').remove();
+    $('#dealer-cards').append('<card-t suit="' + dealersCards[1].suit + '" rank="' + dealersCards[1].rank + '"></card-t>')
+    dealerTotal = calculateTotal(dealersCards);
+    $('#dealer-total').text("Dealer's Total: " + dealerTotal);
+    while (dealerTotal < 17) {
+        drawCard(false);
+        dealerTotal = calculateTotal(dealersCards);
+        $('#dealer-total').text("Dealer's Total: " + dealerTotal);
+    }
+    checkWinner();
+}
+
+function checkWinner() {
+    if (dealerTotal > 21) {
+        win('Dealer went over 21!');
+    } else if (dealerTotal === playerTotal) {
+        push();
+    } else if (dealerTotal > playerTotal) {
+        lose('Dealer got a total of ' + dealerTotal + ' and you got a total of ' + playerTotal + '. \n Dealer wins!');
+    } else {
+        win('You got a total of ' + playerTotal + ' and the dealer got a total of ' + dealerTotal + '. You win!');
+    }
+}
+
 function hit() {
     drawCard(true);
     if (playerTotal > 21) {
         lose('You went over 21!');
+    } else if (playerTotal === 21) {
+        stand();
     }
 }
 
@@ -104,10 +143,16 @@ function stand() {
     console.log('stand');
     $("#hit-button").prop('disabled', 'disabled');
     $("#stand-button").prop('disabled', 'disabled');
+    dealersTurn();
 }
 
 function win(reason) {
-
+    $("#win-reason").text(reason);
+    $("#win-modal").modal({
+        escapeClose: false,
+        clickClose: false,
+        showClose: false
+      });
 }
 
 function lose(reason) {

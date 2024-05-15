@@ -68,7 +68,7 @@ body {
   animation: hover-play-button 1s infinite;
 }
 
-#bet-input {
+#bet {
   background-color: #EAFF01;
   color: black;
   border: none;
@@ -92,7 +92,21 @@ body {
   }
 }
 
-#bet-input:focus {
+#bet:focus {
   outline: none;
   animation: focus-bet-input 1s forwards;
 }
+
+#play-button:disabled {
+  background-color: grey;
+  box-shadow: 0 0 25px grey;
+  color: black;
+  border: none;
+  border-radius: 100px;
+  cursor: not-allowed;
+}
+
+#play-button:disabled:hover {
+  animation: none;
+}
+  
