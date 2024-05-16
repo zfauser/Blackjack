@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width" />
     <title>Blackjack</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
     <link href="../style.css" rel="stylesheet" type="text/css" />
     <script src="script.js"></script>
   </head>
@@ -19,6 +21,11 @@
       <br />
       <br />
       <button id="play-button" disabled="disabled" >PLAY</button>
+    </div>
+    <div id="out-of-money-modal" class="modal">
+      <h1>You're Out Of Smarties!</h1>
+      <p>You need to reset your balance in order to continue playing. If you would no longer like to play, please close this webpage.</p>
+      <button id="reset-button">Reset Balance</button>
     </div>
   </body>
 </html>

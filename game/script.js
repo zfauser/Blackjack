@@ -8,6 +8,17 @@ let playerTotal = 0;
 let dealerTotal = 0;
 let balance = 0;
 let bet = 0;
+let originalBalance = 0;
+let blackjack = false;
+
+function saveVariables() 
+/*
+  Purpose: To save the variables to local storage, which allows them to be saved between sessions
+*/
+{
+  localStorage.setItem("balance", balance);
+  localStorage.setItem("bet", bet);
+}
 
 function loadVariables()
 /* 
@@ -16,6 +27,8 @@ function loadVariables()
 {
     balance = parseInt(localStorage.getItem("balance"));
     bet = parseInt(localStorage.getItem("bet"));
+    console.log(balance, bet);
+    $("#bet").text("Bet: " + bet);
 }
 
 function createDeck() {
@@ -148,6 +161,13 @@ function stand() {
 
 function win(reason) {
     $("#win-reason").text(reason);
+    originalBalance = balance;
+    if (blackjack) {
+        bet = Math.round(bet * 1.5)
+    }
+    balance += bet;
+    $("#win-balance").text("Your Balance is now: "  + balance +" Smarties (was " + originalBalance + " Smarties)")
+    saveVariables();
     $("#win-modal").modal({
         escapeClose: false,
         clickClose: false,
@@ -157,6 +177,10 @@ function win(reason) {
 
 function lose(reason) {
     $("#lose-reason").text(reason);
+    originalBalance = balance;
+    balance -= bet;
+    $("#lose-balance").text("Your Balance is now: "  + balance +" Smarties (was " + originalBalance + " Smarties)")
+    saveVariables();
     $("#lose-modal").modal({
         escapeClose: false,
         clickClose: false,
@@ -165,6 +189,8 @@ function lose(reason) {
 }
 
 function push() {
+    saveVariables();
+    $("#push-balance").text("Your Balance is still: " + balance + " Smarties")
     $("#push-modal").modal({
         escapeClose: false,
         clickClose: false,
@@ -182,6 +208,7 @@ function deal() {
     dealerTotal = calculateTotal(dealersCards);
     if (dealerTotal !== 21) {
         if (playerTotal === 21) {
+            blackjack = true;
             win('You got a Blackjack!');
         }
     }
@@ -197,10 +224,16 @@ function calculateTotal(hand) {
     return total;
 }
 
+function playAgain() {
+    window.location.href = '/bet';
+}
+
 $(document).ready(function() {
+    loadVariables();
     createDeck();
     shuffleArray(cards);
     deal()
     $('#hit-button').click(hit);
     $('#stand-button').click(stand);
+    $('.play-again').click(playAgain);
 });

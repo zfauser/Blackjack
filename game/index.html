@@ -14,7 +14,7 @@
     <script src="./script.js"></script>
   </head>
   <body>
-    <h2>Bet: 0</h1>
+    <h2 id="bet">Bet: 0</h1>
     <div class="center">
       <div id="dealer-cards">
         <span></span>
@@ -36,17 +36,20 @@
     <div id="win-modal" class="modal">
       <h1>You Win!</h1>
       <p id="win-reason"></p>
-      <button id="play-again">Play Again</button>
+      <p id="win-balance">Your Balance is now: 200 Smarties (was 100 Smarties)</p>
+      <button class="play-again">Play Again</button>
     </div>
     <div id="lose-modal" class="modal">
       <h1>You Lose!</h1>
       <p id="lose-reason"></p>
-      <button id="play-again">Play Again</button>
+      <p id="lose-balance">Your Balance is now: 0 Smarties (was 100 Smarties)</p>
+      <button class="play-again">Play Again</button>
     </div>
     <div id="push-modal" class="modal">
       <h1>You Pushed!</h1>
       <p id="push-reason">You and the dealer got the same total!</p>
-      <button id="play-again">Play Again</button>
+      <p id="push-balance">Your Balance is still: 100 Smarties</p>
+      <button class="play-again">Play Again</button>
     </div>
   </body>
 </html>

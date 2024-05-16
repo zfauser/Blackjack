@@ -101,9 +101,16 @@ function onBetInput()
   }
 }
 
-function onPlayButtonClick() {
+function playButton() {
     saveVariables();
     window.location.href = "/game";
+}
+
+function resetButton() {
+  balance = 100;
+  saveVariables();
+  $.modal.close();
+  loadVariables();
 }
 
 $(document).ready(function() {
@@ -111,5 +118,13 @@ $(document).ready(function() {
     $("#bet").keydown(onBetKeydown);
     $("#bet").keyup(onBetKeyup);
     $("#bet").on("input", onBetInput);
-    $("#play-button").click(onPlayButtonClick)
+    $("#play-button").click(playButton)
+    $("#reset-button").click(resetButton)
+    if (balance <= 0) {
+      $("#out-of-money-modal").modal({
+        escapeClose: false,
+        clickClose: false,
+        showClose: false
+      });
+    }
 });
