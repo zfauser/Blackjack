@@ -6,7 +6,7 @@ let dealersCards = [];
 let dealFaceDown = false;
 let playerTotal = 0;
 let dealerTotal = 0;
-let balance = 0;
+let balance = 100;
 let bet = 0;
 let originalBalance = 0;
 let blackjack = false;
@@ -20,6 +20,13 @@ function saveVariables()
   localStorage.setItem("bet", bet);
 }
 
+function saveCards() {
+    // https://stackoverflow.com/questions/3357553/how-do-i-store-an-array-in-localstorage
+    localStorage.setItem("cards", JSON.stringify(cards));
+    localStorage.setItem("playersCards", JSON.stringify(playersCards));
+    localStorage.setItem("dealersCards", JSON.stringify(dealersCards));
+}
+
 function loadVariables()
 /* 
   Purpose: To load the variables from local storage
@@ -28,7 +35,6 @@ function loadVariables()
     if (localStorage.getItem("balance")) {
         balance = parseInt(localStorage.getItem("balance"));
         bet = parseInt(localStorage.getItem("bet"));
-        console.log(balance, bet);
         $("#bet").text("Bet: " + bet);
     } else {
         saveVariables();
@@ -39,7 +45,6 @@ function loadVariables()
     if(localStorage.getItem("path")) {
         if (localStorage.getItem("path") != "/game") {
           window.location.href = localStorage.getItem("path");
-          console.log("redirected to " + localStorage.getItem("path"));
         }
       }
 }
@@ -81,7 +86,6 @@ function shuffleArray(array) {
         array[i] = array[j];
         array[j] = temp;
     }
-    console.log(array);
 }
 
 function drawCard(playersTurn) {
@@ -89,9 +93,7 @@ function drawCard(playersTurn) {
         let suit = card.suit;
         let rank = card.rank;
     if (playersTurn) {
-        console.log(suit, rank);
         playersCards.push({suit: suit, rank: rank})
-        console.log(playersCards)
         let playerCard = $('<card-t suit="' + suit + '" rank="' + rank + '"></card-t>').hide();
         playersCardsWidth += 100;
         $('#player-cards').css('width', playersCardsWidth + 'px');
@@ -102,7 +104,6 @@ function drawCard(playersTurn) {
         $('#player-total').text("Player's Total: " + playerTotal);
     } else {
         dealersCards.push({suit: suit, rank: rank})
-        console.log(dealersCards)
         if (dealFaceDown) {
             let hiddenCard = $('<card-t id="hidden-card" rank="0" backcolor="red" backtext=""></card-t>').hide();
             dealersCardsWidth += 100;
@@ -119,6 +120,7 @@ function drawCard(playersTurn) {
             dealerCard.fadeIn(250);
         }
     }
+    saveVariables();
 }
 
 function dealersTurn() {
@@ -130,6 +132,7 @@ function dealersTurn() {
         drawCard(false);
         dealerTotal = calculateTotal(dealersCards);
         $('#dealer-total').text("Dealer's Total: " + dealerTotal);
+        saveCards();
         if (dealerTotal > 21) {
             break;
         }
@@ -149,6 +152,7 @@ function checkWinner() {
     } else {
         win('You got a total of ' + playerTotal + ' and the dealer got a total of ' + dealerTotal + '. You win!');
     }
+    localStorage.setItem("cards", JSON.stringify(cards));
 }
 
 function hit() {
@@ -156,6 +160,7 @@ function hit() {
         $("#hit-button").prop('disabled', 'disabled');
         $("#stand-button").prop('disabled', 'disabled');
         drawCard(true);
+        saveCards();
     }, 0);
     setTimeout(function() {
         if (playerTotal > 21) {
@@ -169,7 +174,6 @@ function hit() {
 }
 
 function stand() {
-    console.log('stand');
     $("#hit-button").prop('disabled', 'disabled');
     $("#stand-button").prop('disabled', 'disabled');
     dealersTurn();
@@ -184,6 +188,9 @@ function win(reason) {
     balance += bet;
     $("#win-balance").text("Your Balance is now: "  + balance +" Smarties (was " + originalBalance + " Smarties)")
     saveVariables();
+    localStorage.setItem("path", "/bet");
+    localStorage.removeItem("playersCards");
+    localStorage.removeItem("dealersCards");
     $("#win-modal").modal({
         escapeClose: false,
         clickClose: false,
@@ -197,6 +204,9 @@ function lose(reason) {
     balance -= bet;
     $("#lose-balance").text("Your Balance is now: "  + balance +" Smarties (was " + originalBalance + " Smarties)")
     saveVariables();
+    localStorage.setItem("path", "/bet");
+    localStorage.removeItem("playersCards");
+    localStorage.removeItem("dealersCards");
     $("#lose-modal").modal({
         escapeClose: false,
         clickClose: false,
@@ -206,6 +216,9 @@ function lose(reason) {
 
 function push() {
     saveVariables();
+    localStorage.setItem("path", "/bet");
+    localStorage.removeItem("playersCards");
+    localStorage.removeItem("dealersCards");
     $("#push-balance").text("Your Balance is still: " + balance + " Smarties")
     $("#push-modal").modal({
         escapeClose: false,
@@ -214,34 +227,77 @@ function push() {
       });
 }
 
+function drawPreviousCards() {
+    playersCards = JSON.parse(localStorage.getItem("playersCards"));
+    dealersCards = JSON.parse(localStorage.getItem("dealersCards"));
+    cards = JSON.parse(localStorage.getItem("cards"));
+    playersCardsWidth = 200;
+    dealersCardsWidth = 200;
+    for (let i = 0; i < playersCards.length; i++) {
+        let suit = playersCards[i].suit;
+        let rank = playersCards[i].rank;
+        let playerCard = $('<card-t suit="' + suit + '" rank="' + rank + '"></card-t>').hide();
+        playersCardsWidth += 100;
+        $('#player-cards').css('width', playersCardsWidth + 'px');
+        $('#player-cards').css('grid-template-columns', 'repeat(' + (playersCardsWidth/100) + ', 1fr)');
+        $('#player-cards').append(playerCard);
+        playerCard.fadeIn(250);
+    }
+    for (let i = 0; i < dealersCards.length; i++) {
+        let suit = dealersCards[i].suit;
+        let rank = dealersCards[i].rank;
+        let dealerCard = $('<card-t suit="' + suit + '" rank="' + rank + '"></card-t>').hide();
+        if (dealersCards.length === 2 && i === 1) {
+            dealerCard = $('<card-t id="hidden-card" rank="0" backcolor="red" backtext=""></card-t>').hide();
+        }
+        dealersCardsWidth += 100;
+        $('#dealer-cards').css('width', dealersCardsWidth + 'px');
+        $('#dealer-cards').css('grid-template-columns', 'repeat(' + (dealersCardsWidth/100) + ', 1fr)');
+        $('#dealer-cards').append(dealerCard);
+        dealerCard.fadeIn(250);
+    }
+    playerTotal = calculateTotal(playersCards);
+    $('#player-total').text("Player's Total: " + playerTotal);
+}
+
 function deal() {
     $("#hit-button").prop('disabled', 'disabled');
     $("#stand-button").prop('disabled', 'disabled');
-    setTimeout(function() {
-        drawCard(true)
-    }, 0);
-    setTimeout(function() {
-        drawCard(false)
-    }, 250);
-    setTimeout(function() {
-        dealFaceDown = true;
-        drawCard(true)
-    }, 500);
-    setTimeout(function() {
-        drawCard(false)
-        $("#hit-button").prop('disabled', false);
-        $("#stand-button").prop('disabled', false);
-    }, 750);
-    setTimeout(function() {
-        dealFaceDown = false;
-        dealerTotal = calculateTotal(dealersCards);
-        if (dealerTotal !== 21) {
-            if (playerTotal === 21) {
-                blackjack = true;
-                win('You got a Blackjack!');
+    if (localStorage.getItem("dealersCards")) {
+        let tempDealersCards = JSON.parse(localStorage.getItem("dealersCards"));
+        if (tempDealersCards.length >= 2) {
+            drawPreviousCards();
+            $("#hit-button").prop('disabled', false);
+            $("#stand-button").prop('disabled', false);
+        } 
+    } else {
+        setTimeout(function() {
+            drawCard(true)
+        }, 0);
+        setTimeout(function() {
+            drawCard(false)
+        }, 250);
+        setTimeout(function() {
+            dealFaceDown = true;
+            drawCard(true)
+        }, 500);
+        setTimeout(function() {
+            drawCard(false)
+            saveCards();
+            $("#hit-button").prop('disabled', false);
+            $("#stand-button").prop('disabled', false);
+        }, 750);
+        setTimeout(function() {
+            dealFaceDown = false;
+            dealerTotal = calculateTotal(dealersCards);
+            if (dealerTotal !== 21) {
+                if (playerTotal === 21) {
+                    blackjack = true;
+                    win('You got a Blackjack!');
+                }
             }
-        }
-    }, 1000);
+        }, 1000);
+    }
 }
 
 function calculateTotal(cards) {
@@ -259,7 +315,7 @@ function calculateTotal(cards) {
         }
     }
 
-    // If total is over 21 and there's an Ace, subtract 10 (effectively making the Ace count as 1 instead of 11)
+    // If total is over 21 and there's an Ace, subtract 10 (making the Ace count as 1 instead of 11)
     while (total > 21 && aces > 0) {
         total -= 10;
         aces -= 1;
@@ -269,7 +325,6 @@ function calculateTotal(cards) {
 }
 
 function playAgain() {
-    localStorage.setItem("path", "/bet");
     window.location.href = localStorage.getItem("path");
 }
 
