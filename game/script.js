@@ -25,10 +25,23 @@ function loadVariables()
   Purpose: To load the variables from local storage
 */
 {
-    balance = parseInt(localStorage.getItem("balance"));
-    bet = parseInt(localStorage.getItem("bet"));
-    console.log(balance, bet);
-    $("#bet").text("Bet: " + bet);
+    if (localStorage.getItem("balance")) {
+        balance = parseInt(localStorage.getItem("balance"));
+        bet = parseInt(localStorage.getItem("bet"));
+        console.log(balance, bet);
+        $("#bet").text("Bet: " + bet);
+    } else {
+        saveVariables();
+        localStorage.setItem("path", "/");
+        window.location.href = localStorage.getItem("path");
+    }
+
+    if(localStorage.getItem("path")) {
+        if (localStorage.getItem("path") != "/game") {
+          window.location.href = localStorage.getItem("path");
+          console.log("redirected to " + localStorage.getItem("path"));
+        }
+      }
 }
 
 function createDeck() {
@@ -56,22 +69,6 @@ function getCardValue(rank, handTotal) {
     }
 }
 
-function checkAces(hand, handTotal) {
-    if (handTotal > 21) {
-        for (let i = 0; i < hand.length; i++) {
-            if (hand[i].rank == 'A') {
-                // the library allows for Aces to be selected by using A or 1
-                hand[i].rank = '1';
-                handTotal -= 10;
-                if (handTotal <= 21) {
-                    break;
-                }
-            }
-        }
-    }
-    return handTotal;
-}
-
 /* Randomize array in-place using Durstenfeld shuffle algorithm */
 /*Source: https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array */
 function shuffleArray(array) {
@@ -95,25 +92,31 @@ function drawCard(playersTurn) {
         console.log(suit, rank);
         playersCards.push({suit: suit, rank: rank})
         console.log(playersCards)
-        $('#player-cards').append('<card-t suit="' + suit + '" rank="' + rank + '"></card-t>')
+        let playerCard = $('<card-t suit="' + suit + '" rank="' + rank + '"></card-t>').hide();
         playersCardsWidth += 100;
         $('#player-cards').css('width', playersCardsWidth + 'px');
         $('#player-cards').css('grid-template-columns', 'repeat(' + (playersCardsWidth/100) + ', 1fr)');
+        $('#player-cards').append(playerCard);
+        playerCard.fadeIn(250);
         playerTotal = calculateTotal(playersCards);
         $('#player-total').text("Player's Total: " + playerTotal);
     } else {
         dealersCards.push({suit: suit, rank: rank})
         console.log(dealersCards)
         if (dealFaceDown) {
-            $('#dealer-cards').append('<card-t id="hidden-card" rank="0" backcolor="red" backtext=""></card-t>')
+            let hiddenCard = $('<card-t id="hidden-card" rank="0" backcolor="red" backtext=""></card-t>').hide();
             dealersCardsWidth += 100;
             $('#dealer-cards').css('width', dealersCardsWidth + 'px');
             $('#dealer-cards').css('grid-template-columns', 'repeat(' + (dealersCardsWidth/100) + ', 1fr)');
+            $('#dealer-cards').append(hiddenCard);
+            hiddenCard.fadeIn(250);
         } else {
-            $('#dealer-cards').append('<card-t suit="' + suit + '" rank="' + rank + '"></card-t>')
+            let dealerCard = $('<card-t suit="' + suit + '" rank="' + rank + '"></card-t>').hide();
             dealersCardsWidth += 100;
             $('#dealer-cards').css('width', dealersCardsWidth + 'px');
             $('#dealer-cards').css('grid-template-columns', 'repeat(' + (dealersCardsWidth/100) + ', 1fr)');
+            $('#dealer-cards').append(dealerCard);
+            dealerCard.fadeIn(250);
         }
     }
 }
@@ -127,8 +130,13 @@ function dealersTurn() {
         drawCard(false);
         dealerTotal = calculateTotal(dealersCards);
         $('#dealer-total').text("Dealer's Total: " + dealerTotal);
+        if (dealerTotal > 21) {
+            break;
+        }
     }
-    checkWinner();
+    setTimeout(function() {
+        checkWinner();
+    }, 1000);
 }
 
 function checkWinner() {
@@ -144,12 +152,20 @@ function checkWinner() {
 }
 
 function hit() {
-    drawCard(true);
-    if (playerTotal > 21) {
-        lose('You went over 21!');
-    } else if (playerTotal === 21) {
-        stand();
-    }
+    setTimeout(function() {
+        $("#hit-button").prop('disabled', 'disabled');
+        $("#stand-button").prop('disabled', 'disabled');
+        drawCard(true);
+    }, 0);
+    setTimeout(function() {
+        if (playerTotal > 21) {
+            lose('You went over 21!');
+        } else if (playerTotal === 21) {
+            stand();
+        }
+        $("#hit-button").prop('disabled', false);
+        $("#stand-button").prop('disabled', false);
+    }, 250);
 }
 
 function stand() {
@@ -199,33 +215,62 @@ function push() {
 }
 
 function deal() {
-    drawCard(true)
-    drawCard(false)
-    dealFaceDown = true;
-    drawCard(true)
-    drawCard(false)
-    dealFaceDown = false;
-    dealerTotal = calculateTotal(dealersCards);
-    if (dealerTotal !== 21) {
-        if (playerTotal === 21) {
-            blackjack = true;
-            win('You got a Blackjack!');
+    $("#hit-button").prop('disabled', 'disabled');
+    $("#stand-button").prop('disabled', 'disabled');
+    setTimeout(function() {
+        drawCard(true)
+    }, 0);
+    setTimeout(function() {
+        drawCard(false)
+    }, 250);
+    setTimeout(function() {
+        dealFaceDown = true;
+        drawCard(true)
+    }, 500);
+    setTimeout(function() {
+        drawCard(false)
+        $("#hit-button").prop('disabled', false);
+        $("#stand-button").prop('disabled', false);
+    }, 750);
+    setTimeout(function() {
+        dealFaceDown = false;
+        dealerTotal = calculateTotal(dealersCards);
+        if (dealerTotal !== 21) {
+            if (playerTotal === 21) {
+                blackjack = true;
+                win('You got a Blackjack!');
+            }
         }
-    }
+    }, 1000);
 }
 
-function calculateTotal(hand) {
+function calculateTotal(cards) {
     let total = 0;
-    for (let i = 0; i < hand.length; i++) {
-        total += getCardValue(hand[i].rank, total);
-        total = checkAces(hand, total);
-        console.log(hand);
+    let aces = 0;
+
+    for (let i = 0; i < cards.length; i++) {
+        if (cards[i].rank === 'A') {
+            total += 11;
+            aces += 1;
+        } else if (cards[i].rank === 'K' || cards[i].rank === 'Q' || cards[i].rank === 'J') {
+            total += 10;
+        } else {
+            total += parseInt(cards[i].rank);
+        }
     }
+
+    // If total is over 21 and there's an Ace, subtract 10 (effectively making the Ace count as 1 instead of 11)
+    while (total > 21 && aces > 0) {
+        total -= 10;
+        aces -= 1;
+    }
+
     return total;
 }
 
 function playAgain() {
-    window.location.href = '/bet';
+    localStorage.setItem("path", "/bet");
+    window.location.href = localStorage.getItem("path");
 }
 
 $(document).ready(function() {

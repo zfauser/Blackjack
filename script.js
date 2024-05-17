@@ -1,7 +1,8 @@
 let play = false;
 
 function onPlaybuttonClick() {
-    window.location.href = 'bet';
+    localStorage.setItem("path", "/bet");
+    window.location.href = '/bet';
 }
 
 $(document).ready(function() {

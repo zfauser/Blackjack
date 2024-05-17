@@ -26,6 +26,15 @@ function loadVariables()
     }
   } else {
     saveVariables();
+    localStorage.setItem("path", "/");
+    window.location.href = localStorage.getItem("path");
+  }
+
+  if(localStorage.getItem("path")) {
+    if (localStorage.getItem("path") != "/bet") {
+      window.location.href = localStorage.getItem("path");
+      console.log("redirected to " + localStorage.getItem("path"));
+    }
   }
 }
 
@@ -103,6 +112,7 @@ function onBetInput()
 
 function playButton() {
     saveVariables();
+    localStorage.setItem("path", "/game");
     window.location.href = "/game";
 }
 
