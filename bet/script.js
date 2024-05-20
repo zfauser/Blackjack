@@ -6,6 +6,9 @@
 let balance = 100;
 let bet = 0;
 let validStartingValue = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+let wins = 0;
+let losses = 0;
+let ties = 0;
 
 function saveVariables() {
   /*
@@ -13,6 +16,9 @@ function saveVariables() {
 */
   localStorage.setItem("balance", balance);
   localStorage.setItem("bet", bet);
+  localStorage.setItem("wins", wins);
+  localStorage.setItem("losses", losses);
+  localStorage.setItem("ties", ties);
 }
 
 function loadVariables() {
@@ -22,11 +28,18 @@ function loadVariables() {
   // if the variables are in local storage, load them, otherwise set them to the default values
   if (localStorage.getItem("balance")) {
     balance = parseInt(localStorage.getItem("balance"));
+    wins = parseInt(localStorage.getItem("wins"));
+    losses = parseInt(localStorage.getItem("losses"));
+    ties = parseInt(localStorage.getItem("ties"));
     if (balance === 1) {
-      $("#balance").text("Balance: " + balance + " Smartie");
+      $("#balance").text(balance + " Smartie");
     } else {
-      $("#balance").text("Balance: " + balance + " Smarties");
+      $("#balance").text(balance + " Smarties");
     }
+    $('#bet').prop('max', balance);
+    $("#wins").text(wins);
+    $("#losses").text(losses);
+    $("#pushes").text(ties);
   } else {
     saveVariables();
     localStorage.setItem("path", "/");
@@ -77,9 +90,9 @@ function onBetKeyup(e) {
   bet = parseInt($("#bet").val()) || 0;
   newBalance = balance - bet;
   if (newBalance === 1) {
-    $("#balance").text("Balance: " + newBalance + " Smartie");
+    $("#balance").text(newBalance + " Smartie");
   } else {
-    $("#balance").text("Balance: " + newBalance + " Smarties");
+    $("#balance").text(newBalance + " Smarties");
   }
 }
 
@@ -107,9 +120,9 @@ function onBetInput() {
   bet = parseInt($("#bet").val()) || 0;
   newBalance = balance - bet;
   if (newBalance === 1) {
-    $("#balance").text("Balance: " + newBalance + " Smartie");
+    $("#balance").text(newBalance + " Smartie");
   } else {
-    $("#balance").text("Balance: " + newBalance + " Smarties");
+    $("#balance").text(newBalance + " Smarties");
   }
   if (bet > 0 && bet <= balance) {
     $("#play-button").attr("disabled", false);

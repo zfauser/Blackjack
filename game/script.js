@@ -15,6 +15,10 @@ let balance = 100;
 let bet = 0;
 let originalBalance = 0;
 let blackjack = false;
+let wins = 0;
+let losses = 0;
+let ties = 0;
+let firstTurn = true;
 
 function saveVariables() {
   /*
@@ -22,6 +26,9 @@ function saveVariables() {
 */
   localStorage.setItem("balance", balance);
   localStorage.setItem("bet", bet);
+  localStorage.setItem("wins", wins);
+  localStorage.setItem("losses", losses);
+  localStorage.setItem("ties", ties);
 }
 
 function saveCards() {
@@ -41,6 +48,9 @@ function loadVariables() {
   if (localStorage.getItem("balance")) {
     balance = parseInt(localStorage.getItem("balance"));
     bet = parseInt(localStorage.getItem("bet"));
+    wins = parseInt(localStorage.getItem("wins"));
+    losses = parseInt(localStorage.getItem("losses"));
+    ties = parseInt(localStorage.getItem("ties"));
     $("#bet").text("Bet: " + bet);
   } else {
     saveVariables();
@@ -215,6 +225,7 @@ function hit() {
   setTimeout(function() {
     $("#hit-button").prop("disabled", "disabled");
     $("#stand-button").prop("disabled", "disabled");
+    $("#double-button").prop("disabled", "disabled")
     drawCard(true);
     saveCards();
   }, 0);
@@ -240,6 +251,7 @@ function stand() {
 */
   $("#hit-button").prop("disabled", "disabled");
   $("#stand-button").prop("disabled", "disabled");
+  $("#double-button").prop("disabled", "disabled")
   dealersTurn();
 }
 
@@ -263,6 +275,7 @@ function win(reason) {
     originalBalance +
     " Smarties)"
   );
+  wins += 1;
   saveVariables();
   localStorage.setItem("path", "/bet");
   localStorage.removeItem("playersCards");
@@ -290,6 +303,7 @@ function lose(reason) {
     originalBalance +
     " Smarties)"
   );
+  losses += 1;
   saveVariables();
   localStorage.setItem("path", "/bet");
   localStorage.removeItem("playersCards");
@@ -305,6 +319,7 @@ function push() {
   /*
     Purpose: if the user and the dealer have the same total, tell the user that they pushed
 */
+  ties += 1;
   saveVariables();
   localStorage.setItem("path", "/bet");
   localStorage.removeItem("playersCards");
@@ -371,12 +386,20 @@ function deal() {
 */
   $("#hit-button").prop("disabled", "disabled");
   $("#stand-button").prop("disabled", "disabled");
+  $("#double-button").prop("disabled", "disabled")
   if (localStorage.getItem("dealersCards")) {
-    let tempDealersCards = JSON.parse(localStorage.getItem("dealersCards"));
-    if (tempDealersCards.length >= 2) {
+    let tempPlayersCards = JSON.parse(localStorage.getItem("playersCards"));
+    if (tempPlayersCards.length >= 2) {
       drawPreviousCards();
       $("#hit-button").prop("disabled", false);
       $("#stand-button").prop("disabled", false);
+      if (tempPlayersCards.length === 2) {
+        if ((bet * 2) <= balance) {
+          $("#double-button").prop("disabled", false);
+        }
+      } else {
+        $("#double-button").prop("disabled", "disabled");
+      }
     }
   } else {
     // deal the players card, dealer's card, player's card, dealer's card
@@ -397,6 +420,9 @@ function deal() {
       saveCards();
       $("#hit-button").prop("disabled", false);
       $("#stand-button").prop("disabled", false);
+      if ((bet * 2) <= balance) {
+        $("#double-button").prop("disabled", false);
+      }
     }, 750);
     setTimeout(function() {
       dealFaceDown = false;
@@ -457,6 +483,23 @@ function playAgain() {
   window.location.href = localStorage.getItem("path");
 }
 
+function doubleDown() {
+  /*
+    Purpose: if user clicks double down, double the user's bet and draw one more card
+*/
+  bet *= 2;
+  $("#bet").text("Bet: " + bet);
+  $("#double-button").prop("disabled", "disabled");
+  hit();
+  setTimeout(function() {
+    if (playerTotal <= 21) 
+      // prevents the program from having the dealer play if the player goes over 21
+      {
+      stand();
+    }
+  }, 250);
+}
+
 $(document).ready(function() {
   loadVariables();
   createDeck();
@@ -465,4 +508,5 @@ $(document).ready(function() {
   $("#hit-button").click(hit);
   $("#stand-button").click(stand);
   $(".play-again").click(playAgain);
+  $("#double-button").click(doubleDown);
 });
