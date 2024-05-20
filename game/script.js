@@ -3,6 +3,7 @@
   Date: May 6th, 2024
   Purpose: To allow the user to play blackjack
 */
+
 let playersCardsWidth = 200;
 let dealersCardsWidth = 200;
 let cards = [];
