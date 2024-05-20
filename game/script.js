@@ -2,6 +2,7 @@
   Name: Zach Fauser
   Date: May 6th, 2024
   Purpose: To allow the user to play blackjack
+  Repo: https://github.com/zfauser/Blackjack
 */
 
 let playersCardsWidth = 200;
@@ -60,7 +61,7 @@ function loadVariables() {
   }
 
   if (localStorage.getItem("path")) {
-    // the dealer isn't supposed to be on this page
+    // if the user isn't supposed to be on this page (WORKS BETTER WHEN USING THE NEW TAB OPTION ON REPLIT)
     if (localStorage.getItem("path") != "/game") {
       // put them back on the page they are supposed to be on
       window.location.href = localStorage.getItem("path");

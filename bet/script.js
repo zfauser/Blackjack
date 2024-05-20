@@ -2,6 +2,7 @@
   Name: Zach Fauser
   Date: May 6th, 2024
   Purpose: allow user to bet on blackjack
+  Repo: https://github.com/zfauser/Blackjack
 */
 let balance = 100;
 let bet = 0;

@@ -2,6 +2,7 @@
   Name: Zach Fauser
   Date: May 6th, 2024
   Purpose: handle the home page for the blackjack game
+  Repo: https://github.com/zfauser/Blackjack
 */
 let play = false;
 let balance = 100;
