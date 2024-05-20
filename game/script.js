@@ -157,10 +157,10 @@ function dealersTurn() {
   $("#hidden-card").remove();
   $("#dealer-cards").append(
     '<card-t suit="' +
-      dealersCards[1].suit +
-      '" rank="' +
-      dealersCards[1].rank +
-      '"></card-t>'
+    dealersCards[1].suit +
+    '" rank="' +
+    dealersCards[1].rank +
+    '"></card-t>'
   );
   dealerTotal = calculateTotal(dealersCards);
   $("#dealer-total").text("Dealer's Total: " + dealerTotal);
@@ -175,7 +175,7 @@ function dealersTurn() {
   }
 
   // delay one second so the user can see the dealer's final cards before showing how wins and loses
-  setTimeout(function () {
+  setTimeout(function() {
     checkWinner();
   }, 1000);
 }
@@ -191,18 +191,18 @@ function checkWinner() {
   } else if (dealerTotal > playerTotal) {
     lose(
       "Dealer got a total of " +
-        dealerTotal +
-        " and you got a total of " +
-        playerTotal +
-        ". \n Dealer wins!"
+      dealerTotal +
+      " and you got a total of " +
+      playerTotal +
+      ". \n Dealer wins!"
     );
   } else {
     win(
       "You got a total of " +
-        playerTotal +
-        " and the dealer got a total of " +
-        dealerTotal +
-        ". You win!"
+      playerTotal +
+      " and the dealer got a total of " +
+      dealerTotal +
+      ". You win!"
     );
   }
   localStorage.setItem("cards", JSON.stringify(cards));
@@ -212,7 +212,7 @@ function hit() {
   /*
     Purpose: to draw a card for the player
 */
-  setTimeout(function () {
+  setTimeout(function() {
     $("#hit-button").prop("disabled", "disabled");
     $("#stand-button").prop("disabled", "disabled");
     drawCard(true);
@@ -220,7 +220,7 @@ function hit() {
   }, 0);
 
   // wait for animation to finish before allowing user to keep playing
-  setTimeout(function () {
+  setTimeout(function() {
     // automatically lose if the player goes over 21
     if (playerTotal > 21) {
       lose("You went over 21!");
@@ -258,10 +258,10 @@ function win(reason) {
   balance += bet;
   $("#win-balance").text(
     "Your Balance is now: " +
-      balance +
-      " Smarties (was " +
-      originalBalance +
-      " Smarties)"
+    balance +
+    " Smarties (was " +
+    originalBalance +
+    " Smarties)"
   );
   saveVariables();
   localStorage.setItem("path", "/bet");
@@ -285,10 +285,10 @@ function lose(reason) {
   balance -= bet;
   $("#lose-balance").text(
     "Your Balance is now: " +
-      balance +
-      " Smarties (was " +
-      originalBalance +
-      " Smarties)"
+    balance +
+    " Smarties (was " +
+    originalBalance +
+    " Smarties)"
   );
   saveVariables();
   localStorage.setItem("path", "/bet");
@@ -380,25 +380,25 @@ function deal() {
     }
   } else {
     // deal the players card, dealer's card, player's card, dealer's card
-    setTimeout(function () {
+    setTimeout(function() {
       drawCard(true);
     }, 0);
-    setTimeout(function () {
+    setTimeout(function() {
       drawCard(false);
     }, 250);
-    setTimeout(function () {
+    setTimeout(function() {
       drawCard(true);
 
       // make it so the dealers second card will be shown face down
       dealFaceDown = true;
     }, 500);
-    setTimeout(function () {
+    setTimeout(function() {
       drawCard(false);
       saveCards();
       $("#hit-button").prop("disabled", false);
       $("#stand-button").prop("disabled", false);
     }, 750);
-    setTimeout(function () {
+    setTimeout(function() {
       dealFaceDown = false;
       dealerTotal = calculateTotal(dealersCards);
 
@@ -457,7 +457,7 @@ function playAgain() {
   window.location.href = localStorage.getItem("path");
 }
 
-$(document).ready(function () {
+$(document).ready(function() {
   loadVariables();
   createDeck();
   shuffleArray(cards);

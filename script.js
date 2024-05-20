@@ -26,7 +26,7 @@ function instructionsButton() {
   }
 }
 
-$(document).ready(function () {
+$(document).ready(function() {
   $("#instructions").hide();
   $("#play-button").click(playButton);
   $("#instructions-button").click(instructionsButton);

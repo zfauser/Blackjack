@@ -48,6 +48,7 @@ body {
     padding-right: 25px;
     font-size: 25px;
   }
+
   50% {
     box-shadow: 0 0 50px #EAFF01;
     padding: 15px;
@@ -55,6 +56,7 @@ body {
     padding-right: 30px;
     font-size: 30px;
   }
+
   100% {
     box-shadow: 0 0 25px #EAFF01;
     padding: 10px;
@@ -85,6 +87,7 @@ body {
     height: 15px;
     font-size: 15px;
   }
+
   100% {
     /* width: 100px; */
     height: 25px;

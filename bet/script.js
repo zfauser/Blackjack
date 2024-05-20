@@ -137,7 +137,7 @@ function resetButton() {
   loadVariables();
 }
 
-$(document).ready(function () {
+$(document).ready(function() {
   loadVariables();
   $("#bet").keydown(onBetKeydown);
   $("#bet").keyup(onBetKeyup);
