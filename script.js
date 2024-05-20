@@ -38,7 +38,7 @@ function loadVariables() {
 
   if (localStorage.getItem("path")) {
     // if the user has a game in progress, redirect them there
-    if (localStorage.getItem("path") === "/game"){
+    if (localStorage.getItem("path") === "/game") {
       // put them back on the page they are supposed to be on
       window.location.href = localStorage.getItem("path");
     }

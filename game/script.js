@@ -492,9 +492,9 @@ function doubleDown() {
   $("#double-button").prop("disabled", "disabled");
   hit();
   setTimeout(function() {
-    if (playerTotal <= 21) 
-      // prevents the program from having the dealer play if the player goes over 21
-      {
+    if (playerTotal <= 21)
+    // prevents the program from having the dealer play if the player goes over 21
+    {
       stand();
     }
   }, 250);

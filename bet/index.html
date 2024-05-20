@@ -1,33 +1,36 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>Blackjack - Bet</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-    <!-- FROM: https://www.jquerymodal.com/ -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
-    <!-- FROM: https://www.jquerymodal.com/ -->
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>Blackjack - Bet</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
-    <link href="../style.css" rel="stylesheet" type="text/css" />
-    <script src="script.js"></script>
-  </head>
+  <!-- FROM: https://www.jquerymodal.com/ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+  <!-- FROM: https://www.jquerymodal.com/ -->
 
-  <body>
-    <div class="center-content">
-      <h2>How much would you like to bet?</h2>
-      <h2>Balance: <span id="balance">100 Smarties</span></h2>
-      <input id="bet" type="number" min="1" max="100" />
-      <br />
-      <h2>Wins: <span id="wins">0</span> Losses: <span id="losses">0</span> Pushes: <span id="pushes">0</span></h2>
-      <button id="play-button" disabled="disabled" >PLAY</button>
-    </div>
-    <div id="out-of-money-modal" class="modal">
-      <h1>You're Out Of Smarties!</h1>
-      <p>You need to reset your balance in order to continue playing. If you would no longer like to play, please close this webpage.</p>
-      <button id="reset-button">Reset Balance</button>
-    </div>
-  </body>
+  <link href="../style.css" rel="stylesheet" type="text/css" />
+  <script src="script.js"></script>
+</head>
+
+<body>
+  <div class="center-content">
+    <h2>How much would you like to bet?</h2>
+    <h2>Balance: <span id="balance">100 Smarties</span></h2>
+    <input id="bet" type="number" min="1" max="100" />
+    <br />
+    <h2>Wins: <span id="wins">0</span> Losses: <span id="losses">0</span> Pushes: <span id="pushes">0</span></h2>
+    <button id="play-button" disabled="disabled">PLAY</button>
+  </div>
+  <div id="out-of-money-modal" class="modal">
+    <h1>You're Out Of Smarties!</h1>
+    <p>You need to reset your balance in order to continue playing. If you would no longer like to play, please close
+      this webpage.</p>
+    <button id="reset-button">Reset Balance</button>
+  </div>
+</body>
+
 </html>
